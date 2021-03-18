@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang = "en">
+    <head>
+        <meta charset = "UTF-8">
+        <title>Vue Data Binding Spike</title>
+        <link rel="stylesheet" href="main.css">
+        <style>
+            [v-cloak] {
+                display:none;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="Vue-test" v-cloak>
+            <h1>{{ header }}</h1>
+            <input type = "text" v-model = "header">
+        </div>
+        <script src = "https://unpkg.com/vue"></script>
+        <script>
+            var vuetest = new Vue({
+                el: '#Vue-test',
+                data: {
+                    header: 'Vue is ready to party!'
+                }
+            });
+        </script>
+    </body>
+</html>
