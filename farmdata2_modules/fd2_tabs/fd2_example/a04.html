@@ -1,6 +1,6 @@
 <html>
         <body> 
-             <div id='a03ex' v-cloak>
+             <div id='a04ex' v-cloak>
          
             <h1>Harvest Report</h1>
             
@@ -16,7 +16,7 @@
             
             <label for="end">End:</label>
             
-            <input type="date" id="end" name="end" v-model="EndDate" min="2018-05-01" max="2022-01-01">
+            <input type="date" id="end" name="end" v-model="EndDate" min="2014-01-01" max="2022-01-01">
             
             <br>
             
@@ -37,7 +37,7 @@
         
             <br> 
             
-            <button type="button">Generate Report</button>
+            <button type="button" class="btn btn-primary" @click="generateButton" id="generateReport">Generate Report</button>
         
             <hr>
 
@@ -61,34 +61,46 @@
 			    <th>Yield</th>
 		    </tr>
         
-            <tr v-for='harvestLog in harvestLogs'>
-                <td>{{ harvestLog.date1 }}</td>
-                <td>{{ harvestLog.field1 }}</td>
-                <td>{{ harvestLog.crop1 }}</td>
-                <td>{{ harvestLog.yield1 }}</td>
+            <tr v-for='(harvestLog,index) in harvestLogs'>
+                <td>{{ harvestLog.date }}</td>
+                <td>{{ harvestLog.field }}</td>
+                <td>{{ harvestLog.crop }}</td>
+                <td>{{ harvestLog.yield }}</td>
+		<td><button type="button" @click="deleteLog(index)">Delete</button></td>
 		    </tr>
             </table> 
         
 		    </div>
 
 	    <script>
-		var a03vue = new Vue({
-			el: '#a03ex',
+		var a04vue = new Vue({
+			el: '#a04ex',
 			data: {
 				Title: null,
-                StartDate: '2018-05-01',
-				EndDate: '2018-05-15',
-                reportCrop: 'Kale',
+                StartDate: '',
+				EndDate: '',
+                reportCrop: '',
+                state:'inVisible',
                 crops: [ 'Broccoli', 'Kale', 'Peas' ],
                 fields: [ 'All', 'Chuau-1', 'SQ7' ],
-                harvestLogs: [
-                    {date1: '05/02/2018', field1: 'Chuau-1', crop1: 'Kale', yield1: '10 bunches' },
-                    {date2: '05/05/2018', field2: 'SQ7', crop2: 'Kale', yield2: '7 Bunches' }
-                ],
-			}
+                harvestLogs: [],
+		        Log:[ {Date: '05/02/2018', Field: 'SQ7', Crop: 'Kale', Yield: '10 Bunches'},
+		        {Date: '09/02/2018', Field: 'All', Crop: 'Brocoli', Yield: '7 Bunches'},
+		        {Date: '11/02/2018', Field: 'SQ7', Crop: 'Peas', Yield: '10 Bunches'}
+		        ]			
+            },
+		    methods:{
+			    generateButton: function(){
+				    if(this.harvestLogs.length < 3) {
+					    if (this.harvestLogs.length == 0) {
+                            this.state='visible';
+                        }
+                    }
+                }
+            }
         });
         Vue.config.devtools = true;
         </script>
-
+        
     </body>
 </html>

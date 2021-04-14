@@ -1,28 +1,43 @@
-<!DOCTYPE html>
-<html lang = "en">
+<html>
     <head>
         <meta charset = "UTF-8">
         <title>Vue Data Binding Spike</title>
-        <link rel="stylesheet" href="main.css">
-        <style>
-            [v-cloak] {
-                display:none;
-            }
-        </style>
     </head>
     <body>
-        <div id="Vue-test" v-cloak>
-            <h1>{{ header }}</h1>
-            <input type = "text" v-model = "header">
+        <div id="Vue-test">
+            <h1>{{ header.toLocaleUpperCase() }}</h1>
+            <div class="add-item-form">
+                <input type="text" v-model="newName" placeholder="Vue is ready to party!" @keyup.enter="saveName">
+                <label for = "name"> Name: </label>
+                <input type="text" id="name" value="name" v-model="Name">
+                <button class = "btn btn-primary" v-on:click="saveName"> Add Name </button>
+            </div>
+
+            <ul>
+                <li v-for="name in names">{{ name }}</li>
+            </ul>
+
         </div>
+
         <script src = "https://unpkg.com/vue"></script>
+
         <script>
             var vuetest = new Vue({
                 el: '#Vue-test',
                 data: {
-                    header: 'Vue is ready to party!'
+                    header: 'Vue is ready to party',
+                    newName: '',
+                    Name: '',
+                    names: [
+                    ]
+                },
+                methods: {
+                    saveName: function() {
+                        this.names.push(newName);
+                    }
                 }
             });
+        Vue.config.devtools = true;
         </script>
     </body>
 </html>
