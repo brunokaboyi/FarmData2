@@ -10,12 +10,21 @@
                 <input type="text" v-model="newName" placeholder="Vue is ready to party!" @keyup.enter="saveName">
                 <label for = "name"> Name: </label>
                 <input type="text" id="name" value="name" v-model="Name">
-                <button class = "btn btn-primary" v-on:click="saveName"> Add Name </button>
+                <button class = "btn btn-primary" @click= "saveName" :disabled= "newName.length === 0" > Add Name </button>
             </div>
 
             <ul>
-                <li v-for="name in names">{{ name }}</li>
+                <li v-for='(name,index) in names'>{{ Name + ' (' + index + ')' }}
+                    <button type='button' @click='deleteName(nameIndex,1)'>Delete</button>
+                </li>
+                <li v-if=”names.length === 0”> No names yet! </li>
             </ul>
+            <div class=”header”>
+                <button v-if=”state === ‘default’” class=”button” @click=”changestate(‘edit’)”> Show Cards</button>
+                <button v-else class = “button” @click=”changestate(‘default’)”>Hide Cards</button>
+            </div>
+
+            <p>{{"Total Name Length: " + totalNameLength}}</p>
 
         </div>
 
@@ -28,12 +37,29 @@
                     header: 'Vue is ready to party',
                     newName: '',
                     Name: '',
-                    names: [
-                    ]
+                    names: [ ],
+                    state: '',
+                    changestate='',
+                    computed: {
+                        totalNameLength() {
+                            return 0;
+                        },
+                    },
                 },
                 methods: {
                     saveName: function() {
                         this.names.push(newName);
+                    },
+                    deleteName: function(nameIndex) {
+                        this.names.splice(nameIndex, 1);
+                    },
+                    totalNameLength: function() {
+                        sum= 0;
+                        for(let i = 0; i < this.names.length; i++){
+                            nameLength = this.names[i].length;
+                            sum = sum + nameLength;
+                        }
+                        return sum;
                     }
                 }
             });
