@@ -11,12 +11,12 @@
             <br>
             
             <label for="start">Start:</label>
-            
-            <input type="date" id="start" name="start" v-model="StartDate" min="2014-01-01" max="2022-01-01">
+
+            <input type="date" id="start" name="start" v-model="StartDate" min="2014-01-01" :max="EndDate">
             
             <label for="end">End:</label>
             
-            <input type="date" id="end" name="end" v-model="EndDate" min="2014-01-01" max="2022-01-01">
+            <input type="date" id="end" name="end" v-model="EndDate" :min="StartDate" max="2022-01-01">
             
             <br>
             
@@ -40,7 +40,7 @@
             <button type="button" class="btn btn-primary" @click="generateButton" id="generateReport">Generate Report</button>
         
             <hr>
-
+            <div v-if="state=='visible'">
             <h1>{{ Title ? Title : "Mock Harvest Report" }}</h1>
         
 		    <p>Details:</p>
@@ -50,10 +50,10 @@
 			    <li><strong>End:</strong>{{ EndDate }}</li>
                 <li><strong>Crop:</strong>{{ reportCrop }}</li>
             </ul>
-
+            <p v-if="harvestLogs.length == 0">No records match the search.</p>
 		    <br>
         
-            <table border=1>
+            <table border=1 v-else>
 		    <tr>
 			    <th>Date</th>
 			    <th>Field</th>
@@ -62,21 +62,23 @@
 		    </tr>
         
             <tr v-for='(harvestLog,index) in harvestLogs'>
-                <td>{{ harvestLog.date }}</td>
-                <td>{{ harvestLog.field }}</td>
-                <td>{{ harvestLog.crop }}</td>
-                <td>{{ harvestLog.yield }}</td>
+                <td>{{ harvestLog.Date }}</td>
+                <td>{{ harvestLog.Field }}</td>
+                <td>{{ harvestLog.Crop }}</td>
+                <td>{{ harvestLog.Yield }}</td>
 		<td><button type="button" @click="deleteLog(index)">Delete</button></td>
 		    </tr>
             </table> 
-        
-		    </div>
+            <p> Total Yield: {{ totalYield }} Bunches </p>
+            </div>
+
+            </div>
 
 	    <script>
 		var a04vue = new Vue({
 			el: '#a04ex',
 			data: {
-				Title: null,
+				Title: '',
                 StartDate: '',
 				EndDate: '',
                 reportCrop: '',
@@ -95,7 +97,21 @@
 					    if (this.harvestLogs.length == 0) {
                             this.state='visible';
                         }
+                        this.harvestLogs.push(this.Log[this.harvestLogs.length])
                     }
+                },
+                deleteLog: function(index){
+                    this.harvestLogs.splice(index,1);
+                }
+            },
+            computed:{
+                totalYield: function(){
+                    var total = 0;
+                    for (let i=0; i<this.harvestLogs.length; i=i++) {
+                        let yield = parseInt(this.harvestLogs[i].Yield.split(" ")[0]);
+                        total = total + yield;
+                    }
+                    return total;
                 }
             }
         });
