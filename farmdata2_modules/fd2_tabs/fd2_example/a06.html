@@ -93,12 +93,15 @@
             },
 		    methods:{
 			    generateButton: function(){
-				    if(this.harvestLogs.length < 3) {
-					    if (this.harvestLogs.length == 0) {
-                            this.state='visible';
-                        }
-                        this.harvestLogs.push(this.Log[this.harvestLogs.length])
-                    }
+				    axios.get('/log.json?type=farm_harvest&area=jasmine-1')
+                .then(response => {
+            this.harvestLog = response.data.list.map(h =>{
+                return{
+                    Date:h.timestamp,
+                    Field: 'blah',
+                    Crop:'blah',
+                    Yield:'blah',
+                };
                 },
                 deleteLog: function(index){
                     this.harvestLogs.splice(index,1);
